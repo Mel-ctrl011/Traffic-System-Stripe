@@ -1,0 +1,52 @@
+{
+  "expo": {
+    "name": "moova",
+    "slug": "moova",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "edgeToEdgeEnabled": true,
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.anonymous.moova"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      [
+        "@stripe/stripe-react-native",
+        {}
+      ],
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "TrafficConnect needs camera access to verify your face."
+        }
+      ],
+      "expo-router",
+      "@react-native-community/datetimepicker",
+      "expo-font"
+    ]
+  }
+}

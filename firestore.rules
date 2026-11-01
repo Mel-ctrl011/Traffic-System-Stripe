@@ -1,0 +1,45 @@
+rules_version = '2';
+
+/* =========================================================
+   PAYMENT-RELATED RULES
+
+   The current login does not create a Firebase Auth session, so
+   these rules cannot tell which citizen is reading. Reads stay as
+   open as they were before this integration. WRITES to payment
+   data are blocked for every client.
+
+   Firebase replaces ALL rules on deploy. Merge these blocks into
+   your full rules file before deploying, or other screens may fail.
+========================================================= */
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Citizen profile. The old login reads and updates this directly.
+    // Clients may never set or change the Stripe customer link.
+    match /citizens/{citizenId} {
+      allow read: if true;
+      allow create: if !('stripeCustomerId' in request.resource.data);
+      allow update: if !request.resource.data.diff(resource.data).affectedKeys()
+        .hasAny(['stripeCustomerId']);
+      allow delete: if false;
+    }
+
+    // Fines: clients read, the backend writes payment state.
+    match /fines/{fineId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Payment history: written only by the Stripe webhook.
+    match /paymentHistory/{paymentId} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Internal Stripe intent ledger. Never readable by clients.
+    match /paymentIntents/{intentId} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,420 @@
+Problems Being Solved
+1. Long Queues at Traffic Departments
+Current Problem
+Citizens spend hours waiting at traffic departments.
+Many people leave without being assisted due to long queues.
+Simple services require physical visits.
+Solution
+Online bookings and appointments.
+Digital access to traffic services.
+Reduced need for branch visits.
+2. No Central Mobile Platform
+Current Problem
+Citizens cannot access all traffic-related services in one place.
+Information is scattered across multiple systems.
+Solution
+One mobile application for all traffic services.
+Centralized user dashboard.
+3. Forgotten Driver's Licenses
+Current Problem
+Drivers sometimes leave their physical licenses at home.
+This can lead to unnecessary penalties and delays.
+Solution
+Secure Electronic Driver's License.
+QR Code/NFC verification.
+Biometric authentication for identity confirmation.
+4. Unclear License Collection Status
+Current Problem
+Citizens don't know when their license cards are ready for collection.
+Repeated trips to traffic departments.
+Solution
+Real-time license status tracking.
+Collection notifications.
+Email and in-app alerts.
+5. Difficulty Booking Appointments
+Current Problem
+Limited visibility of available booking slots.
+Citizens struggle to schedule renewals and tests.
+Solution
+Appointment booking system.
+Available branch schedules.
+Available date and time selection.
+6. Traffic Fine Management
+Current Problem
+Drivers are unaware of outstanding fines.
+Difficult to check camera speeding tickets.
+Solution
+Fine tracking dashboard.
+View penalty amounts.
+Pay fines directly from the app.
+7. Vehicle License Renewal Challenges
+Current Problem
+Vehicle owners forget renewal dates.
+Late renewals result in penalties.
+Solution
+Renewal reminders.
+Online license disk payments.
+Expiry date notifications.
+8. Poor Communication from Traffic Departments
+Current Problem
+Citizens often miss important updates.
+No proactive notification system.
+Solution
+Push notifications.
+Email alerts.
+Collection reminders.
+Traffic department announcements.
+9. Limited Access to Traffic Information
+Current Problem
+Drivers are unaware of:
+Road closures
+Accidents
+Heavy traffic conditions
+Solution
+Real-time traffic updates.
+Road closure alerts.
+Alternative route suggestions.
+Accident notifications.
+10. Accessibility Challenges
+Current Problem
+Some users struggle to access services due to disabilities.
+Solution
+AI chatbot assistance.
+Voice-friendly support.
+User-friendly navigation.
+11. Lack of Digital Learning Resources
+Current Problem
+Learner drivers have limited preparation resources.
+Solution
+Learner's license lessons.
+Practice materials.
+Test booking system.
+12. Data and Connectivity Limitations
+Current Problem
+Many South Africans cannot always afford mobile data.
+Users may lose access during emergencies.
+Solution
+Offline mode.
+Low-data usage design.
+Cached important documents and information.
+13. Cashless and Convenient Payments
+Current Problem
+Citizens may not have cash available.
+Payment processes are inconvenient.
+Solution
+Cardless payments.
+Digital payment integration.
+Secure online transactions.
+Main Project Goal
+
+To create a secure, user-friendly mobile platform that digitizes South African traffic and licensing services, reducing queues, saving time, improving accessibility, and providing citizens with real-time access to their licenses, vehicles, fines, appointments, and road information.
+
+
+Recommended Bottom Navigation
+1. Home
+
+This is the dashboard.
+
+Shows:
+Driver's License Status
+Vehicle License Status
+Outstanding Fines
+Upcoming Appointments
+License Collection Status
+Expiry Alerts
+Recent Notifications
+Traffic Alerts
+Road Closure Alerts
+Weather Summary
+Quick Actions
+Pay Fine
+Renew License Disk
+Book Appointment
+View Digital License
+Report Issue
+2. My Licenses
+
+Everything related to licenses.
+
+Driver's License
+Digital Driver's License
+QR Code
+NFC Verification
+License Number
+Expiry Date
+Renewal Status
+Vehicle Licenses
+Vehicle List
+License Disk Expiry
+Vehicle Information
+Ownership Information
+Collection Status
+Card Production Status
+Ready For Collection
+Collection Location
+Renewal Section
+Renew Driver's License
+Renew Vehicle License
+ 3. Services
+
+All traffic department services.
+
+Appointment Booking
+Driver's License Renewal
+Learner's License Test
+Driver's Test
+Change of Ownership
+Vehicle Registration
+Available Branches
+Branch Locations
+Available Slots
+Available Times
+Document Upload
+Upload ID
+Upload Proof of Address
+Upload Supporting Documents
+Applications
+New License Application
+Vehicle Registration
+Ownership Transfer
+4. Payments
+
+Everything money-related.
+
+Fines
+Speed Camera Tickets
+Outstanding Penalties
+Payment History
+Vehicle Payments
+License Disk Payments
+Vehicle Registration Fees
+Payment Methods
+Card Payments
+Instant EFT
+Mobile Payments
+Receipts
+Download Receipt
+Email Receipt
+5. Traffic & News
+
+Real-time traffic information.
+
+Traffic News
+Road Closures
+Accidents
+Construction Zones
+Live Traffic
+Congested Roads
+High Traffic Areas
+Alternative Routes
+Suggested Routes
+Travel Time Estimates
+Weather
+Current Weather
+Rain Warnings
+Fog Warnings
+Department Announcements
+New Regulations
+System Maintenance
+Public Notices
+Profile Menu (Not a Bottom Tab)
+
+Put this in the top-right corner.
+
+Profile Contains:
+Personal Information
+Linked Vehicles
+Linked Licenses
+Security Settings
+Face ID Setup
+Fingerprint Setup
+Email Settings
+Notification Settings
+Language Settings
+Accessibility Settings
+Help Center
+Chatbot
+Logout
+User Flow
+BOTTOM TABS
+
+Home
+My Licenses
+ Services
+Payments
+Traffic & News
+
+
+TOP RIGHT
+
+Profile
+
+Recommended Firestore Structure
+1. users
+
+Stores citizen information.
+
+users
+ └── userId
+      ├── idNumber
+      ├── fullName
+      ├── email
+      ├── phone
+      ├── province
+      └── createdAt
+2. driversLicenses
+
+Stores driver's license information.
+
+driversLicenses
+ └── licenseId
+      ├── userId
+      ├── licenseNumber
+      ├── issueDate
+      ├── expiryDate
+      ├── status
+      └── qrCode
+3. vehicles
+
+Stores vehicle information.
+
+vehicles
+ └── vehicleId
+      ├── ownerId
+      ├── registrationNumber
+      ├── make
+      ├── model
+      ├── year
+      └── diskExpiry
+4. fines
+
+Stores speeding tickets and penalties.
+
+fines
+ └── fineId
+      ├── userId
+      ├── vehicleId
+      ├── amount
+      ├── offense
+      ├── status
+      └── issuedDate
+5. appointments
+
+Bookings made by users.
+
+appointments
+ └── appointmentId
+      ├── userId
+      ├── serviceType
+      ├── branch
+      ├── date
+      ├── time
+      └── status
+6. payments
+
+Payment records.
+
+payments
+ └── paymentId
+      ├── userId
+      ├── amount
+      ├── paymentType
+      ├── status
+      └── paidAt
+7. notifications
+
+Push notifications and alerts.
+
+notifications
+ └── notificationId
+      ├── userId
+      ├── title
+      ├── message
+      ├── read
+      └── createdAt
+8. branches
+
+Traffic department branches.
+
+branches
+ └── branchId
+      ├── name
+      ├── address
+      ├── province
+      ├── phone
+      └── operatingHours
+9. roadAlerts
+
+Road closures and traffic alerts.
+
+roadAlerts
+ └── alertId
+      ├── title
+      ├── location
+      ├── severity
+      ├── description
+      └── createdAt
+10. news
+
+Traffic department announcements.
+
+news
+ └── newsId
+      ├── title
+      ├── content
+      ├── image
+      └── publishedAt
+Optional Collections
+
+If your lecturer wants something more advanced:
+
+11. learnerTests
+learnerTests
+ └── testId
+
+Stores practice questions.
+
+12. supportChats
+supportChats
+ └── chatId
+
+Stores chatbot conversations.
+
+What Happens During Login?
+
+The flow would be:
+
+User enters ID Number
+       ↓
+Firebase Authentication
+       ↓
+Find user document
+       ↓
+Get userId
+       ↓
+Fetch:
+
+users
+driversLicenses
+vehicles
+fines
+appointments
+notifications
+
+       ↓
+Display on Home Screen
+
+For a final-year project, I'd build 10 core collections:
+
+users
+driversLicenses
+vehicles
+fines
+appointments
+payments
+notifications
+branches
+roadAlerts
+news
+
+These are enough to cover almost every feature you listed while keeping the database manageable and professional.
