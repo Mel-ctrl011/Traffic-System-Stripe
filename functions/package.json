@@ -2,7 +2,9 @@
   "name": "traffic-connect-functions",
   "private": true,
   "main": "lib/index.js",
-  "engines": { "node": "22" },
+  "engines": {
+    "node": "22"
+  },
   "scripts": {
     "build": "tsc",
     "serve": "npm run build && firebase emulators:start --only functions,firestore",
@@ -14,6 +16,7 @@
     "stripe": "^18.0.0"
   },
   "devDependencies": {
+    "jest": "^30.5.2",
     "typescript": "~5.9.2"
   }
 }
