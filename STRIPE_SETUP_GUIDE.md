@@ -321,81 +321,10 @@ If the fine doesn't update, check that the webhook endpoint in Stripe shows
 successful deliveries (**Developers → Webhooks**). A failed delivery usually
 means the `STRIPE_WEBHOOK_SECRET` doesn't match the endpoint.
 
----
-
-## 9. PCI DSS: what this design does and what you still own
-
-### What PCI DSS is
-
-PCI DSS is the Payment Card Industry Data Security Standard. Any business that
-handles card data must follow it. The amount of work depends on how much card
-data touches your systems. Your situation depends on your payment setup.
-
-### PCI scope needs confirmation
-
-Stripe's PaymentSheet collects card data in Stripe's own SDK. Our code only
-handles payment references and IDs. This may reduce PCI scope, but it does not
-by itself certify the project for SAQ A. Confirm the applicable questionnaire
-and requirements with Stripe, your acquirer, or a qualified assessor.
-
-### What the code does for you
-
-| Requirement area | What is in place |
-|------------------|------------------|
-| No card data in our systems | Card entry is in Stripe's SDK. The old raw-card screen is deleted. |
-| No CVV storage | We never receive a CVV. Nothing stores it. |
-| Secrets protected | The Stripe secret key and webhook secret belong in Firebase Secret Manager, not the app or Git. Keep the `.env` file local and verify it is ignored by Git before committing. |
-| Server-side amounts | The app sends only a `fineId`. The backend reads the amount. |
-| Verified callbacks | The webhook checks Stripe's signature before trusting an event. |
-| Webhook retries | Repeated delivery of the same successful PaymentIntent is handled once. Separate PaymentIntents for one fine are not prevented. |
-| Amount check | The webhook compares the amount received with the recorded intent amount. If they differ, it records a mismatch; it cannot reverse a payment already accepted by Stripe. |
-| Access control | The current login has no Firebase Auth session. The checked-in rules are not safe to deploy as a production policy; use a test project and complete rules review first. |
-| Minimal data sent to Stripe | Only the fine ID goes into payment metadata, not ID numbers. |
-| Truncated card data only | The webhook stores card brand and last four digits, not the full card number or CVV. Confirm display and retention requirements with your assessor/acquirer. |
-
-### What you still have to do
-
-These are your responsibilities. The code cannot do them for you.
-
-1. **Strengthen the login.** Login uses ID number plus device ID, which the device
-   can supply itself. Add a one-time code (SMS/OTP) before go-live. This is the
-   most important security gap, because the payment session trusts the login.
-2. **Enable Firebase App Check** on Functions and Firestore to block requests
-   from anything other than your genuine app.
-3. **Keep the Stripe account secure.** Turn on two-factor authentication for
-   every Stripe user. Remove former team members. Roll keys if exposed.
-4. **Keep logs clean.** Never log request bodies from payment calls. Current code
-   logs only IDs and messages. Check any new logging you add.
-5. **Keep dependencies updated.** Run `npm audit` regularly and update the Stripe
-   SDKs when Stripe announces new API versions.
-6. **Complete the applicable PCI DSS assessment** as required by Stripe and
-   your acquirer; do not assume the integration automatically qualifies for SAQ A.
-7. **Use live keys only after review.** Going live needs Stripe business
-   verification and live keys (`pk_live_` / `sk_live_`). Replace the keys in
-   Firebase secrets and `.env`. Do not put live keys into a test build.
-8. **Get a professional review before handling real public money.** A government
-   service may face additional requirements (data protection law, retention,
-   audit). This guide is not a compliance certification. A Qualified Security
-   Assessor (QSA) can confirm your scope.
 
 ---
 
-## 10. What is still simulated or missing
-
-- Saved cards: the backend has listing and deletion functions (`listSavedCards`,
-  `deleteSavedCard`), but no screen calls them yet. The backend sets
-  `setup_future_usage: "off_session"`; verify the desired consent and saved
-  payment-method UX with Stripe before offering this to users.
-- EFT and digital wallet options were simulated and have been removed from the
-  fine payment screen. They can be added later through real providers.
-- Appointment booking fees still use the old flow. Apply the same
-  `createFinePayment` pattern with a new backend function.
-- **Login is the original one.** Its ID number and device check still runs on the device, and the citizen data it reads stays open. Moving login to Firebase Auth is the next step. When that happens, the rules can require a signed-in user.
-- **Payment functions check the ID number and device on every call**, using the same registration the login uses.
-
----
-
-## 11. Quick troubleshooting
+## 9. Quick troubleshooting
 
 | Symptom | Likely cause and fix |
 |---------|----------------------|
@@ -411,7 +340,7 @@ These are your responsibilities. The code cannot do them for you.
 | Fine is rejected as already paid or has no valid amount | Check its Firestore fields. It needs a positive `outstandingAmount` (at least R5.00) and the correct `citizenId`; see the final troubleshooting section. |
 | Payment history is empty after a decline | Failed intents are recorded internally, but the current payment-history screen only reads successful `paymentHistory` records. |
 
-## 12. Files changed in this integration
+## 10. Files changed in this integration
 
 ```
 functions/                              NEW  backend (Stripe + webhook)
@@ -439,7 +368,7 @@ numbers in Firestore and simulated gateways. This integration replaces that appr
 
 ---
 
-## 13. Setup errors you may encounter and how to troubleshoot them
+## 11. Setup errors you may encounter and how to troubleshoot them
 
 Use the checks below in order. Never paste Stripe secret keys, webhook signing
 secrets, client secrets, or full Firebase/Stripe logs into a public issue or
